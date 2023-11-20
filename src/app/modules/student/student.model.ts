@@ -56,7 +56,6 @@ const userNameSchema = new Schema<UserName>({
 
 const studentSchema = new Schema<Student>(
     {
-        id: { type: String },
         name: {
             type: userNameSchema,
             required: true,

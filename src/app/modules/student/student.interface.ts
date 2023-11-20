@@ -1,26 +1,25 @@
-export type Guardian = {
+export interface Guardian {
     fatherName: string;
     fatherOccupation: string;
     fatherContactNo: string;
     motherName: string;
     motherOccupation: string;
     motherContactNo: string;
-};
+}
 
-export type UserName = {
+export interface UserName {
     firstname: string;
     middlename?: string;
     lastname: string;
-};
+}
 
-export type LocalGuardian = {
+export interface LocalGuardian {
     name: string;
     occupation: string;
     contactNo: string;
-};
+}
 
-export type Student = {
-    id: string;
+export interface Student {
     name: UserName;
     gender: 'male' | 'female';
     dateOfBirth?: string;
@@ -34,4 +33,4 @@ export type Student = {
     localGuardian: LocalGuardian;
     profileImg?: string;
     isActive: 'active' | 'blocked';
-};
+}
