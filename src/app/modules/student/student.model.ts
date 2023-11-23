@@ -1,13 +1,15 @@
 import { Schema, model } from 'mongoose';
 import {
-    Guardian,
-    LocalGuardian,
-    Student,
-    UserName,
+    // StudentMethod,
+    StudentModel,
+    TGuardian,
+    TLocalGuardian,
+    TStudent,
+    TUserName,
 } from './student.interface';
 import validator from 'validator';
 
-const guardianSchema = new Schema<Guardian>({
+const guardianSchema = new Schema<TGuardian>({
     fatherName: {
         type: String,
         required: true,
@@ -34,7 +36,7 @@ const guardianSchema = new Schema<Guardian>({
     },
 });
 
-const localGuardianSchema = new Schema<LocalGuardian>({
+const localGuardianSchema = new Schema<TLocalGuardian>({
     name: {
         type: String,
         required: true,
@@ -49,7 +51,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
     },
 });
 
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
     firstname: {
         type: 'string',
         required: true,
@@ -63,7 +65,7 @@ const userNameSchema = new Schema<UserName>({
     },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent, StudentModel>({
     name: {
         type: userNameSchema,
         required: [true, 'Please provide a name'],
@@ -136,4 +138,26 @@ const studentSchema = new Schema<Student>({
     },
 });
 
-export const StudentModel = model<Student>('Student', studentSchema);
+// Creating a custom static method
+studentSchema.statics.isUserExists = async function (email: string) {
+    const existingUser = await Student.findOne({ email });
+    return existingUser;
+};
+
+// studentSchema.methods.isUserExists = async function (email: string) {
+//     const existingUser = await Student.findOne({
+//         email,
+//     });
+//     return existingUser;
+// };
+
+export const Student = model<TStudent, StudentModel>('Student', studentSchema);
+
+// const Student = model<TStudent, StudentModel>('Student', studentSchema);
+
+// studentSchema.methods.isUserExists = async function (email: string) {
+//     const existingUser = await Student.findOne({ email });
+//     return existingUser;
+// };
+
+// export { Student };

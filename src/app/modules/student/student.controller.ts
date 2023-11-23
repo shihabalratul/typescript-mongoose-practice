@@ -6,18 +6,13 @@ const createStudent = async (req: Request, res: Response) => {
     try {
         const { student: studentData } = req.body;
 
-        const { error, value } = studentValidationSchema.validate(studentData);
+        // data validation using joi
+        // const { error, value } = studentValidationSchema.validate(studentData);
 
-        if (error) {
-            res.status(500).json({
-                success: true,
-                message: 'Invalid data given.',
-                error: error.details,
-            });
-        }
+        const zodparsedData = studentValidationSchema.parse(studentData);
 
         // will call service function to send this data
-        const result = await StudentServices.createStudentIntoDB(value);
+        const result = await StudentServices.createStudentIntoDB(zodparsedData);
 
         //  send response
         res.status(200).json({
@@ -25,10 +20,11 @@ const createStudent = async (req: Request, res: Response) => {
             message: 'Student created successfully',
             data: result,
         });
-    } catch (err) {
+    } catch (err: any) {
         res.status(500).json({
             success: false,
-            message: err,
+            message: err.message || 'Something went wrong',
+            error: err,
         });
         console.log(err);
     }
