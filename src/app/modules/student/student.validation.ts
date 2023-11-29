@@ -33,6 +33,7 @@ const userNameValidationSchema = z.object({
 
 const studentValidationSchema = z.object({
     name: userNameValidationSchema,
+    password: z.string(),
     gender: z.enum(['male', 'female']),
     dateOfBirth: z.string().optional(),
     email: z.string().email(), // You can add custom validation for email
@@ -45,6 +46,7 @@ const studentValidationSchema = z.object({
     localGuardian: localGuardianValidationSchema,
     profileImg: z.string().optional(),
     isActive: z.enum(['active', 'blocked']).default('active'),
+    isDeleted: z.boolean(),
 });
 
 export default studentValidationSchema;

@@ -1,29 +1,32 @@
 /* eslint-disable no-unused-vars */
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
-export interface TGuardian {
+export type TGuardian = {
     fatherName: string;
     fatherOccupation: string;
     fatherContactNo: string;
     motherName: string;
     motherOccupation: string;
     motherContactNo: string;
-}
+};
 
-export interface TUserName {
+export type TUserName = {
     firstname: string;
     middlename?: string;
     lastname: string;
-}
+};
 
-export interface TLocalGuardian {
+export type TLocalGuardian = {
     name: string;
     occupation: string;
     contactNo: string;
-}
+};
 
-export interface TStudent {
+export type TStudent = {
+    id: string;
+    user: Types.ObjectId;
     name: TUserName;
+    password: string;
     gender: 'male' | 'female';
     dateOfBirth?: string;
     email: string;
@@ -35,8 +38,8 @@ export interface TStudent {
     guardian: TGuardian;
     localGuardian: TLocalGuardian;
     profileImg?: string;
-    isActive: 'active' | 'blocked';
-}
+    isDeleted: boolean;
+};
 
 //for creating static method
 export interface StudentModel extends Model<TStudent> {
@@ -44,7 +47,7 @@ export interface StudentModel extends Model<TStudent> {
 }
 
 // for creating instance method
-// export interface StudentMethod {
+// export type StudentMethod = {
 //     isUserExists(email: string): Promise<TStudent | null>;
 // }
 

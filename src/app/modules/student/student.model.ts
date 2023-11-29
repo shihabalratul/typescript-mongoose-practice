@@ -66,6 +66,17 @@ const userNameSchema = new Schema<TUserName>({
 });
 
 const studentSchema = new Schema<TStudent, StudentModel>({
+    id: {
+        type: String,
+        required: [true, 'ID is required'],
+        unique: true,
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        required: [true, 'User id is required'],
+        unique: true,
+        ref: 'User',
+    },
     name: {
         type: userNameSchema,
         required: [true, 'Please provide a name'],
@@ -127,15 +138,25 @@ const studentSchema = new Schema<TStudent, StudentModel>({
         required: [true, 'Please provide local guardian details'],
     },
     profileImg: { type: String },
-    isActive: {
-        type: String,
-        enum: {
-            values: ['active', 'blocked'],
-            message:
-                '{VALUE} is not a valid status. Status can only be one of the followings: "active", "blocked"',
-        },
-        default: 'active',
+    isDeleted: {
+        type: Boolean,
     },
+});
+
+// query middleware
+studentSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+
+studentSchema.pre('aggregate', function (next) {
+    this.pipeline().unshift({
+        $match: {
+            isDeleted: { $ne: true },
+        },
+    });
+    console.log(this.pipeline());
+    next();
 });
 
 // Creating a custom static method
@@ -144,20 +165,4 @@ studentSchema.statics.isUserExists = async function (email: string) {
     return existingUser;
 };
 
-// studentSchema.methods.isUserExists = async function (email: string) {
-//     const existingUser = await Student.findOne({
-//         email,
-//     });
-//     return existingUser;
-// };
-
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
-
-// const Student = model<TStudent, StudentModel>('Student', studentSchema);
-
-// studentSchema.methods.isUserExists = async function (email: string) {
-//     const existingUser = await Student.findOne({ email });
-//     return existingUser;
-// };
-
-// export { Student };
