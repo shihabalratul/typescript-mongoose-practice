@@ -1,34 +1,34 @@
 /* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
 
-export type TGuardian = {
+export interface TGuardian {
     fatherName: string;
     fatherOccupation: string;
     fatherContactNo: string;
     motherName: string;
     motherOccupation: string;
     motherContactNo: string;
-};
+}
 
-export type TUserName = {
+export interface TUserName {
     firstname: string;
     middlename?: string;
     lastname: string;
-};
+}
 
-export type TLocalGuardian = {
+export interface TLocalGuardian {
     name: string;
     occupation: string;
     contactNo: string;
-};
+}
 
-export type TStudent = {
+export interface TStudent {
     id: string;
     user: Types.ObjectId;
     name: TUserName;
     password: string;
     gender: 'male' | 'female';
-    dateOfBirth?: string;
+    dateOfBirth?: Date;
     email: string;
     contactNo: string;
     emergencyContactNo: string;
@@ -38,8 +38,10 @@ export type TStudent = {
     guardian: TGuardian;
     localGuardian: TLocalGuardian;
     profileImg?: string;
+    admissionSemester: Types.ObjectId;
+    academicDepartment: Types.ObjectId;
     isDeleted: boolean;
-};
+}
 
 //for creating static method
 export interface StudentModel extends Model<TStudent> {
@@ -47,11 +49,11 @@ export interface StudentModel extends Model<TStudent> {
 }
 
 // for creating instance method
-// export type StudentMethod = {
+// export interface StudentMethod {
 //     isUserExists(email: string): Promise<TStudent | null>;
 // }
 
-// export type StudentModel = Model<
+// export interface StudentModel = Model<
 //     TStudent,
 //     Record<string, never>,
 //     StudentMethod

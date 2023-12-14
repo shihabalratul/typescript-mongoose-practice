@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StudentServices } from './student.services';
 import httpStatus from 'http-status';
-import sendResponse from '../../utils/serndResponse';
+import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
 
 const getAllStudents = catchAsync(async (req, res) => {
-    const result = await StudentServices.getAllStudentFromDB();
+    // console.log(req.query);
+
+    const result = await StudentServices.getAllStudentFromDB(req.query);
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -26,6 +29,22 @@ const getSingleStudent = catchAsync(async (req, res) => {
     });
 });
 
+const updateStudent = catchAsync(async (req, res) => {
+    const { studentId } = req.params;
+    const { student } = req.body;
+    const result = await StudentServices.updateStudentIntoDB(
+        studentId,
+        student,
+    );
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student updated successfully!',
+        data: result,
+    });
+});
+
 const deleteStudent = catchAsync(async (req, res) => {
     const { studentId } = req.params;
     const result = await StudentServices.deleteStudentFromDB(studentId);
@@ -42,4 +61,5 @@ export const StudentControllers = {
     getAllStudents,
     getSingleStudent,
     deleteStudent,
+    updateStudent,
 };

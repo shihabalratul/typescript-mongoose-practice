@@ -9,61 +9,76 @@ import {
 } from './student.interface';
 import validator from 'validator';
 
-const guardianSchema = new Schema<TGuardian>({
-    fatherName: {
-        type: String,
-        required: true,
+const guardianSchema = new Schema<TGuardian>(
+    {
+        fatherName: {
+            type: String,
+            required: true,
+        },
+        fatherOccupation: {
+            type: String,
+            required: true,
+        },
+        fatherContactNo: {
+            type: String,
+            required: true,
+        },
+        motherName: {
+            type: String,
+            required: true,
+        },
+        motherOccupation: {
+            type: String,
+            required: true,
+        },
+        motherContactNo: {
+            type: String,
+            required: true,
+        },
     },
-    fatherOccupation: {
-        type: String,
-        required: true,
+    {
+        _id: false,
     },
-    fatherContactNo: {
-        type: String,
-        required: true,
-    },
-    motherName: {
-        type: String,
-        required: true,
-    },
-    motherOccupation: {
-        type: String,
-        required: true,
-    },
-    motherContactNo: {
-        type: String,
-        required: true,
-    },
-});
+);
 
-const localGuardianSchema = new Schema<TLocalGuardian>({
-    name: {
-        type: String,
-        required: true,
+const localGuardianSchema = new Schema<TLocalGuardian>(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        occupation: {
+            type: String,
+            required: true,
+        },
+        contactNo: {
+            type: String,
+            required: true,
+        },
     },
-    occupation: {
-        type: String,
-        required: true,
+    {
+        _id: false,
     },
-    contactNo: {
-        type: String,
-        required: true,
-    },
-});
+);
 
-const userNameSchema = new Schema<TUserName>({
-    firstname: {
-        type: 'string',
-        required: true,
-        trim: true,
-        maxlength: [20, 'First name cannot more than 20 characters'],
+const userNameSchema = new Schema<TUserName>(
+    {
+        firstname: {
+            type: 'string',
+            required: true,
+            trim: true,
+            maxlength: [20, 'First name cannot more than 20 characters'],
+        },
+        middlename: { type: 'string' },
+        lastname: {
+            type: 'string',
+            required: true,
+        },
     },
-    middlename: { type: 'string' },
-    lastname: {
-        type: 'string',
-        required: true,
+    {
+        _id: false,
     },
-});
+);
 
 const studentSchema = new Schema<TStudent, StudentModel>({
     id: {
@@ -91,12 +106,12 @@ const studentSchema = new Schema<TStudent, StudentModel>({
         required: [true, 'Please select a gender'],
     },
     dateOfBirth: {
-        type: String,
+        type: Date,
     },
     email: {
         type: String,
         required: [true, 'Please provide an email address'],
-        // unique: true,
+        unique: true,
         message:
             '{VALUE} email address is already registered. Please use a different email address',
         validate: {
@@ -138,6 +153,16 @@ const studentSchema = new Schema<TStudent, StudentModel>({
         required: [true, 'Please provide local guardian details'],
     },
     profileImg: { type: String },
+    admissionSemester: {
+        type: Schema.Types.ObjectId,
+        required: [true, 'Admission semester is required'],
+        ref: 'AcademicSemester',
+    },
+    academicDepartment: {
+        type: Schema.Types.ObjectId,
+        required: [true, 'Academic department is required'],
+        ref: 'AcademicDepartment',
+    },
     isDeleted: {
         type: Boolean,
     },

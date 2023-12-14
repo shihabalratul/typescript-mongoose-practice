@@ -31,22 +31,46 @@ const userNameValidationSchema = z.object({
         .max(20),
 });
 
-const studentValidationSchema = z.object({
-    name: userNameValidationSchema,
+const createStudentValidationSchema = z.object({
     password: z.string(),
-    gender: z.enum(['male', 'female']),
-    dateOfBirth: z.string().optional(),
-    email: z.string().email(), // You can add custom validation for email
-    contactNo: z.string(),
-    emergencyContactNo: z.string(),
-    bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
-    presentAdress: z.string(),
-    permanentAdress: z.string(),
-    guardian: guardianValidationSchema,
-    localGuardian: localGuardianValidationSchema,
-    profileImg: z.string().optional(),
-    isActive: z.enum(['active', 'blocked']).default('active'),
-    isDeleted: z.boolean(),
+    student: z.object({
+        name: userNameValidationSchema,
+        gender: z.enum(['male', 'female']),
+        dateOfBirth: z.string().optional(),
+        email: z.string().email(), // You can add custom validation for email
+        contactNo: z.string(),
+        emergencyContactNo: z.string(),
+        bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+        presentAdress: z.string(),
+        permanentAdress: z.string(),
+        guardian: guardianValidationSchema,
+        localGuardian: localGuardianValidationSchema,
+        admissionSemester: z.string(),
+        profileImg: z.string().optional(),
+    }),
 });
 
-export default studentValidationSchema;
+const updateStudentValidationSchema = z.object({
+    student: z.object({
+        name: userNameValidationSchema.partial().optional(),
+        gender: z.enum(['male', 'female']).optional(),
+        dateOfBirth: z.string().optional(),
+        email: z.string().email().optional(), // You can add custom validation for email
+        contactNo: z.string().optional(),
+        emergencyContactNo: z.string().optional(),
+        bloodGroup: z
+            .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+            .optional(),
+        presentAdress: z.string().optional(),
+        permanentAdress: z.string().optional(),
+        guardian: guardianValidationSchema.partial().optional(),
+        localGuardian: localGuardianValidationSchema.partial().optional(),
+        admissionSemester: z.string().optional(),
+        profileImg: z.string().optional(),
+    }),
+});
+
+export const studentValidations = {
+    createStudentValidationSchema,
+    updateStudentValidationSchema,
+};
