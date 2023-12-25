@@ -71,7 +71,7 @@ const deleteFacultyFromDB = async (id: string) => {
         // get user _id from deletedFaculty
         const userId = deletedFaculty.user;
 
-        const deletedUser = await User.findOneAndUpdate(
+        const deletedUser = await User.findByIdAndUpdate(
             userId,
             { isDeleted: true },
             { new: true, session },
